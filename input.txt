@@ -1,0 +1,3 @@
+6 4
+I I U U U str
+I U U str

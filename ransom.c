@@ -13,52 +13,65 @@
 
 char* readline();
 char** split_string(char*);
-//I added
-typedef struct node* p_node;
-typedef struct node {
-    char *name;
-    int counter;
-    p_node next;
-} node;
-void freeList(p_node head){
+
+
+
+
+    struct node {
+        char *name;
+        int counter;
+        struct node *next;
+    };
+/**
+ * @freeList free all the linked lisd
+ *   @param head pointer to the head of the list
+*/
+void free_list(struct node *head){
     while(head!=NULL){
-        p_node tmp=head->next;
+        struct node *tmp=head->next;
         free(head->name);
         free(head);
         head=tmp;
+        }
+
     }
-
-}
-
+/**
+ * @checkMagazine check if possile to write a sentecne from the words we have
+ * @param magazine_count word's number we can use
+ * @param mgazine pointer to the strings we can use thier words
+ * @param note_count number of the words in the sentence we try to write
+ * @param note pointer to the strings we try to write the sentence from them
+ * @printf "Yes" if possible, else printf "No"
+*/
 // Complete the checkMagazine function below.
 void checkMagazine(int magazine_count, char** magazine, int note_count, char** note) {
 
-   //if note is empty we got all the word
+   /*check cases that possible to answer without readind the words*/
    if(note_count==0){
        printf("Yes");
        return;
    }
-   //check  if the the note is longer than the magazine
-   //if longer- it's impossible to write the magazine
-   if(note_count>magazine_count)
-   {
-       printf("NO");
+   
+   if(note_count>magazine_count){
+       printf("No");
        return;
    }
-    //built the map of what we have in the magazine
-    p_node head_magazine=NULL;
-    p_node  tail_magazine=NULL;
-    p_node head_note=NULL;
-    p_node tail_note=NULL;
+    
+    
+    struct node *head_magazine=NULL;
+    struct node *tail_magazine=NULL;
+    struct node *head_note=NULL;
+    struct node *tail_note=NULL;
     bool found= false;
-    //start the list of
-    p_node first_node= (p_node)malloc(sizeof (node));
+    
+    /*build a linked list for the words we can use*/
+    struct node *first_node= (struct node*)malloc(sizeof (struct node));
     if(first_node==NULL){return;}
     head_magazine=first_node;
     tail_magazine= first_node;
     char *copied_name=(char*)malloc(strlen(magazine[0]));
      if(copied_name==NULL){
-        freeList(head_magazine);
+        free_list(head_magazine);
         return;
     }
 
@@ -68,33 +81,33 @@ void checkMagazine(int magazine_count, char** magazine, int note_count, char** n
     first_node->counter=1;
     first_node->next=NULL;
 
-    //insert the others words into the list
+    /*insert the others words after the first into the list*/
     for(int i=1;i<magazine_count;i++){
-        //check if already in the list
+        
             found=false;
-        p_node current=head_magazine;
-
+        struct node *current=head_magazine;
+			/*check if already in the list*/
             while ((current!=NULL)&&(found==false)){
-            if(strcmp(magazine[i],current->name)==0)
-                {
+            if(strcmp(magazine[i],current->name)==0){
                 current->counter++;
                 found=true;
                 }
-            else{current=current->next;}
+            else{
+            current=current->next;}
             }
-        //add to the list if wasn't found
+        /*add to the list if wasn't found*/
         if(current==NULL)
         {
-            p_node new_node= (p_node)malloc(sizeof (node));
+            struct node *new_node= (struct node*)malloc(sizeof (struct node));
             if(first_node==NULL){
-                freeList(head_magazine);
+                free_list(head_magazine);
                 return;}
 
             tail_magazine->next= new_node;
             tail_magazine=new_node;
-            char* copied_name=(char*)malloc(strlen(magazine[i]));
+            char *copied_name=(char*)malloc(strlen(magazine[i]));
             if(copied_name==NULL){
-                freeList(head_magazine);
+                free_list(head_magazine);
                 return;
             }
             copied_name=strcpy(copied_name,magazine[i]);
@@ -105,55 +118,56 @@ void checkMagazine(int magazine_count, char** magazine, int note_count, char** n
         }
 
 
-        //for the case that the list is
+        
     }
 
-//built a map of what want in the note
-    p_node first_node_note= (p_node)malloc(sizeof (node));
+	/*build a linked list for the words we need*/
+    struct node *first_node_note= (struct node*)malloc(sizeof (struct node));
     if(first_node_note==NULL){
-        freeList(head_magazine);
+        free_list(head_magazine);
         return;}
     head_note=first_node_note;
     tail_note= first_node_note;
-    char* first_name_note=(char*) malloc(strlen(note[0]));
+    char *first_name_note=(char*) malloc(strlen(note[0]));
     if(first_name_note==NULL){
-        freeList(head_magazine);
-        freeList(head_note);
+        free_list(head_magazine);
+        free_list(head_note);
         return;
     }
     first_name_note=strcpy(first_name_note,note[0]);
     first_node_note->name=first_name_note;
     first_node_note->counter=1;
     first_node_note->next=NULL;
-    //insert the others words into the list
+    /*insert the others words after the first into the list*/
     for(int i=1;i<note_count;i++){
-        //check if already in the list
-
-        p_node current=head_note;
+    
+        /*check if already in the list*/
+        struct node *current=head_note;
         found=false;
         while ((current!=NULL)&&(found==false)){
-            if(strcmp(note[i],current->name)==0)
-            {
+            if(strcmp(note[i],current->name)==0){
                 current->counter++;
                 found=true;
             }
-            else{current=current->next;}
+            else{
+            current=current->next;
+            }
         }
-        //add to the list if wasn't found
+        /*add to the list if wasn't found*/
         if(found==false)
         {
-            p_node new_node= (p_node)malloc(sizeof (node));
+            struct node *new_node= (struct node*)malloc(sizeof (struct node));
             if(first_node==NULL){
-                freeList(head_magazine);
-                freeList(head_note);
+                free_list(head_magazine);
+                free_list(head_note);
                 return;}
 
             tail_note->next= new_node;
             tail_note=new_node;
-            char* copied_name=(char*)malloc (strlen(note[i]));
+            char *copied_name=(char*)malloc (strlen(note[i]));
             if(copied_name==NULL){
-                freeList(head_magazine);
-                freeList(head_note);
+                free_list(head_magazine);
+                free_list(head_note);
                 return;
             }
             copied_name=strcpy(copied_name,note[i]);
@@ -163,20 +177,20 @@ void checkMagazine(int magazine_count, char** magazine, int note_count, char** n
         }
 
 
-        //for the case that the list is
+        
     }
-//comp in the second is in the first
-    p_node current_magazine= head_magazine;
-    p_node current_note=head_note;
+	/*checking if we have all the words we need in tne magazine*/
+    struct node *current_magazine= head_magazine;
+    struct node *current_note=head_note;
     bool counter_too_small=false;
-    while ((current_magazine!=NULL)&&(current_note!=NULL)&&(counter_too_small==false))
+    while ((current_magazine!=NULL)&&(current_note!=NULL)
+    &&(counter_too_small==false))
     {
         current_magazine= head_magazine;
         bool found_enough=false;
-        while ((current_magazine!=NULL)&&(counter_too_small==false)&&(found_enough==false))
-        {
-            if(strcmp(current_note->name,current_magazine->name)==0)
-            {
+        /*compare all the words and if was found check if appears enough times*/
+        while ((current_magazine!=NULL)&&(counter_too_small==false)&&(found_enough==false)){
+            if(strcmp(current_note->name,current_magazine->name)==0){
                 if((current_note->counter)<=(current_magazine->counter)){
                     current_note=current_note->next;
                     found_enough=true;
@@ -192,11 +206,11 @@ void checkMagazine(int magazine_count, char** magazine, int note_count, char** n
 
 
     }
-    //all found
+    /*printf the answer and free lists*/
     if(current_note==NULL){printf("Yes");}
     else{printf("No");}
-    freeList(head_magazine);
-    freeList(head_note);
+    free_list(head_magazine);
+    free_list(head_note);
 
 }
 

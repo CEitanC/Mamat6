@@ -46,17 +46,6 @@ void free_list(struct node *head){
 // Complete the checkMagazine function below.
 void checkMagazine(int magazine_count, char** magazine, int note_count, char** note) {
 
-   /*check cases that possible to answer without readind the words*/
-   if(note_count==0){
-       printf("Yes");
-       return;
-   }
-   
-   if(note_count>magazine_count){
-       printf("No");
-       return;
-   }
-    
     
     struct node *head_magazine=NULL;
     struct node *tail_magazine=NULL;

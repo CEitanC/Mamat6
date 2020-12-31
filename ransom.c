@@ -24,7 +24,7 @@ char** split_string(char*);
     };
 /**
  * @freeList free all the linked lisd
- *   @param head pointer to the head of the list
+ * @param head pointer to the head of the list
 */
 void free_list(struct node *head){
     while(head!=NULL){
